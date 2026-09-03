@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using QahwaKhatra.Data;
 using QahwaKhatra.Core;
+using QahwaKhatra.Cleaning;
 
 namespace QahwaKhatra.Customer
 {
@@ -16,10 +17,15 @@ namespace QahwaKhatra.Customer
 
         private void Update()
         {
-            // Only spawn if cafe is open or in cafe mode
+            // STRICT RULE: 0 clients until Day 1 garage cleaning is 100% complete and Cafe is officially ready!
+            if (CleaningManager.Instance != null && !CleaningManager.Instance.IsDayOneCompleted)
+            {
+                return;
+            }
+
             if (GameManager.Instance != null && GameManager.Instance.CurrentState == GameState.TutorialCleaning)
             {
-                // Can start spawning once Day 1 objective is achieved
+                return;
             }
 
             _timer += Time.deltaTime;
@@ -52,7 +58,6 @@ namespace QahwaKhatra.Customer
 
             var ai = customerGO.AddComponent<CustomerAI>();
 
-            // Pick random customer profile
             CustomerTypeSO profile = null;
             if (_customerTypes.Count > 0)
             {

@@ -14,7 +14,18 @@ namespace QahwaKhatra.Cleaning
         private bool _isCleaned = false;
 
         public bool IsCleaned => _isCleaned;
-        public string PromptMessage => _isCleaned ? "" : "Sweep Dust (نظف الغبرة)";
+        public string PromptMessage
+        {
+            get
+            {
+                if (_isCleaned) return "";
+                if (CleaningManager.Instance != null && !CleaningManager.Instance.HasMop)
+                {
+                    return "خاصك جفاف من البيسي باش تسيق! (Need Mop & Bucket)";
+                }
+                return "Sweep Floor (سيّق الغبرة)";
+            }
+        }
 
         public static event Action OnDustCleaned;
 
@@ -30,9 +41,15 @@ namespace QahwaKhatra.Cleaning
         {
             if (_isCleaned) return;
 
+            // Must have mop purchased first!
+            if (CleaningManager.Instance != null && !CleaningManager.Instance.HasMop)
+            {
+                Debug.Log("[DustZone] You need to buy a Mop & Bucket from the Laptop before you can clean the floor!");
+                return;
+            }
+
             _currentCleanProgress += 0.5f;
 
-            // Fade out dust visually
             if (_dustRenderer != null && _dustRenderer.material != null)
             {
                 Color c = _dustRenderer.material.color;
