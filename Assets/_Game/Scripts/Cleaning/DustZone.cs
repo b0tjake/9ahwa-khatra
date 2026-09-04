@@ -21,9 +21,9 @@ namespace QahwaKhatra.Cleaning
                 if (_isCleaned) return "";
                 if (CleaningManager.Instance != null && !CleaningManager.Instance.HasMop)
                 {
-                    return "خاصك جفاف من البيسي باش تسيق! (Need Mop & Bucket)";
+                    return QahwaKhatra.Utils.ArabicFixer.Fix("خاصك سطل وجفاف من البيسي (Need Mop)");
                 }
-                return "Sweep Floor (سيّق الغبرة)";
+                return QahwaKhatra.Utils.ArabicFixer.Fix("سيق الغبرة (Sweep Floor)");
             }
         }
 

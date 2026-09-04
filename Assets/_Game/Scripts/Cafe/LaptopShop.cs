@@ -37,7 +37,7 @@ namespace QahwaKhatra.Cafe
                 {
                     return ArabicFixer.Fix("خوي الخردة عاد خدم البيسي (Clear junk first!)");
                 }
-                return "USE LAPTOP (حل البيسي)";
+                return ArabicFixer.Fix("حل البيسي (USE LAPTOP)");
             }
         }
 
