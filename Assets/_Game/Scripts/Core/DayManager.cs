@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using QahwaKhatra.Utils;
 using QahwaKhatra.Core;
 using QahwaKhatra.Data;
+using QahwaKhatra.Cleaning;
 
 namespace QahwaKhatra.Core
 {
@@ -57,6 +58,20 @@ namespace QahwaKhatra.Core
 
         private void CheckObjectiveCompletion()
         {
+            // CRITICAL: On Day 1, the day NEVER ends merely because money was earned from junk!
+            // Day 1 ONLY completes when:
+            // 1) All junk removed
+            // 2) Mop & bucket bought
+            // 3) Garage floor completely cleaned
+            // 4) Espresso machine bought and installed
+            if (_currentDay == 1)
+            {
+                if (CleaningManager.Instance != null && !CleaningManager.Instance.IsDayOneCompleted)
+                {
+                    return; // Day 1 remains in progress until CleaningManager signals Day1Completed!
+                }
+            }
+
             var obj = CurrentObjective;
             if (obj == null) return;
 
@@ -80,26 +95,41 @@ namespace QahwaKhatra.Core
             _dailyCustomersServed = 0;
             _isDaySummaryOpen = false;
 
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.SetState(GameState.CafeOpen);
+            }
+
             EventBus.TriggerDayStarted(_currentDay);
-            Debug.Log($"[DayManager] Welcome to Day {_currentDay}!");
+            Debug.Log($"[DayManager] Welcome to Day {_currentDay}! The cafe is now open for business.");
         }
 
         private void OnGUI()
         {
             if (!_isDaySummaryOpen) return;
 
-            float w = 380f;
-            float h = 260f;
+            float w = 420f;
+            float h = 280f;
             float x = (Screen.width - w) / 2f;
             float y = (Screen.height - h) / 2f;
 
-            GUI.Box(new Rect(x, y, w, h), ArabicFixer.Fix($"🎉 نهاية اليوم {_currentDay} (Day Summary)"));
+            GUI.Box(new Rect(x, y, w, h), ArabicFixer.Fix($"🎉 نهاية اليوم {_currentDay} (Day {_currentDay} Complete!)"));
 
-            GUI.Label(new Rect(x + 20, y + 40, w - 40, 30), ArabicFixer.Fix($"الفلوس المربوحة اليوم: {_dailyEarnings:F0} DH"));
-            GUI.Label(new Rect(x + 20, y + 75, w - 40, 30), ArabicFixer.Fix($"الزبناء لي شربو القهوة: {_dailyCustomersServed} زبون"));
-            GUI.Label(new Rect(x + 20, y + 110, w - 40, 45), ArabicFixer.Fix("مبروك كملتي الهدف ديال اليوم!\nيمكن ليك دوز لليوم الموالي وتطور المحل."));
+            if (_currentDay == 1)
+            {
+                GUI.Label(new Rect(x + 20, y + 40, w - 40, 30), ArabicFixer.Fix("✅ تم تنظيف الكراج بالكامل (Garage is Clean)"));
+                GUI.Label(new Rect(x + 20, y + 70, w - 40, 30), ArabicFixer.Fix("✅ تم شراء السطل والجفاف (Mop Acquired)"));
+                GUI.Label(new Rect(x + 20, y + 100, w - 40, 30), ArabicFixer.Fix("✅ تم تركيب آلة القهوة (Espresso Machine Ready)"));
+                GUI.Label(new Rect(x + 20, y + 135, w - 40, 45), ArabicFixer.Fix("مبروك! الكراج واجد باش يستقبل أول زبناء درب سلطان غداً."));
+            }
+            else
+            {
+                GUI.Label(new Rect(x + 20, y + 40, w - 40, 30), ArabicFixer.Fix($"الفلوس المربوحة اليوم: {_dailyEarnings:F0} DH"));
+                GUI.Label(new Rect(x + 20, y + 75, w - 40, 30), ArabicFixer.Fix($"الزبناء لي شربو القهوة: {_dailyCustomersServed} زبون"));
+                GUI.Label(new Rect(x + 20, y + 115, w - 40, 45), ArabicFixer.Fix("مبروك كملتي الهدف ديال اليوم!\nيمكن ليك دوز لليوم الموالي وتطور المحل."));
+            }
 
-            if (GUI.Button(new Rect(x + 20, y + 175, w - 40, 50), ArabicFixer.Fix("دوز لليوم الموالي (Start Next Day ➡️)")))
+            if (GUI.Button(new Rect(x + 20, y + 195, w - 40, 55), ArabicFixer.Fix("دوز لليوم الموالي وافتح المقهى (Open Cafe - Day 2 ➡️)")))
             {
                 StartNextDay();
             }

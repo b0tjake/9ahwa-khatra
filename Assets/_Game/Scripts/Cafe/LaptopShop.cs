@@ -103,7 +103,7 @@ namespace QahwaKhatra.Cafe
 
                 if (CleaningManager.Instance != null)
                 {
-                    CleaningManager.Instance.CompleteCafeSetup();
+                    CleaningManager.Instance.CompleteEspressoPurchase();
                 }
                 Debug.Log("[Windows XP] Order Placed: Basic Espresso Machine for 100 DH!");
             }
