@@ -27,6 +27,8 @@ namespace QahwaKhatra.Cafe
         private float _loginTimer = 0f;
         private bool _startMenuOpen = false;
 
+        public bool IsOpen => _isOpen;
+
         public string PromptMessage
         {
             get
@@ -83,11 +85,15 @@ namespace QahwaKhatra.Cafe
             if (CurrencyManager.Instance != null && CurrencyManager.Instance.SpendDirhams(30f))
             {
                 _hasBoughtMop = true;
+                
+                // Spawn Cardboard Delivery Box outside the garage door in the Derb!
+                SpawnDeliveryBox(DeliveryItemType.MopAndBucket, "سطل وجفاف (Mop & Bucket)", new Vector3(-1f, 0.4f, -4.5f));
+
                 if (CleaningManager.Instance != null)
                 {
-                    CleaningManager.Instance.AcquireMop();
+                    CleaningManager.Instance.NotifyOrderedMop();
                 }
-                Debug.Log("[Windows XP] Order Placed: Mop & Bucket (سطل وجفاف) for 30 DH!");
+                Debug.Log("[Windows XP] Order Placed: Mop & Bucket! Delivered outside garage.");
             }
         }
 
@@ -96,28 +102,31 @@ namespace QahwaKhatra.Cafe
             if (CurrencyManager.Instance != null && CurrencyManager.Instance.SpendDirhams(100f))
             {
                 _hasBoughtEspresso = true;
-                SpawnEspressoMachine();
+
+                // Spawn Espresso Machine Delivery Box outside in the Derb!
+                SpawnDeliveryBox(DeliveryItemType.EspressoMachine, "آلة إسبريسو (Espresso Machine)", new Vector3(1f, 0.5f, -4.5f));
 
                 if (CleaningManager.Instance != null)
                 {
-                    CleaningManager.Instance.CompleteEspressoPurchase();
+                    CleaningManager.Instance.NotifyOrderedEspresso();
                 }
-                Debug.Log("[Windows XP] Order Placed: Basic Espresso Machine for 100 DH!");
+                Debug.Log("[Windows XP] Order Placed: Espresso Machine! Delivered outside garage.");
             }
         }
 
-        private void SpawnEspressoMachine()
+        private void SpawnDeliveryBox(DeliveryItemType itemType, string itemName, Vector3 streetPos)
         {
-            var machine = GameObject.CreatePrimitive(PrimitiveType.Cube);
-            machine.name = "Espresso_Machine";
-            machine.transform.position = new Vector3(-2f, 1.4f, 4f);
-            machine.transform.localScale = new Vector3(0.9f, 0.8f, 0.7f);
+            var box = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            box.name = $"DeliveryBox_{itemType}";
+            box.transform.position = streetPos;
+            box.transform.localScale = new Vector3(0.85f, 0.75f, 0.85f);
 
             var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-            mat.color = new Color(0.75f, 0.15f, 0.15f);
-            machine.GetComponent<Renderer>().material = mat;
+            mat.color = new Color(0.72f, 0.53f, 0.35f); // Realistic cardboard brown
+            box.GetComponent<Renderer>().material = mat;
 
-            machine.AddComponent<QahwaKhatra.CoffeeCrafting.EspressoStation>();
+            var delivery = box.AddComponent<DeliveryBox>();
+            delivery.Initialize(itemType, itemName);
         }
 
         private void OnGUI()
@@ -133,7 +142,6 @@ namespace QahwaKhatra.Cafe
             // 1. WELCOME / LOGIN SCREEN
             if (_osState == WindowsXPState.BootWelcome || _osState == WindowsXPState.LoggingIn)
             {
-                // Fullscreen Windows XP Deep Blue
                 GUI.color = new Color(0.0f, 0.2f, 0.65f);
                 GUI.DrawTexture(new Rect(x, y, w, h), Texture2D.whiteTexture);
                 GUI.color = Color.white;
@@ -161,10 +169,8 @@ namespace QahwaKhatra.Cafe
             }
 
             // 2. WINDOWS XP FULLSCREEN DESKTOP (BLISS GREEN/BLUE)
-            // Cyan Sky
             GUI.color = new Color(0.25f, 0.65f, 0.88f);
             GUI.DrawTexture(new Rect(0, 0, w, h - 45), Texture2D.whiteTexture);
-            // Bliss Rolling Green Grass
             GUI.color = new Color(0.2f, 0.68f, 0.22f);
             GUI.DrawTexture(new Rect(0, h * 0.5f, w, h * 0.5f - 45), Texture2D.whiteTexture);
             GUI.color = Color.white;
@@ -192,14 +198,13 @@ namespace QahwaKhatra.Cafe
                 float winX = (w - winW) / 2f;
                 float winY = 25f;
 
-                // Window Title Bar (Windows XP Classic Luna Blue)
+                // Title Bar
                 GUI.color = new Color(0.05f, 0.35f, 0.9f);
                 GUI.DrawTexture(new Rect(winX, winY, winW, 32), Texture2D.whiteTexture);
                 GUI.color = Color.white;
 
                 GUI.Label(new Rect(winX + 12, winY + 6, 350, 24), "🌐 Internet Explorer - www.derb-express.ma");
 
-                // Red Close 'X' Button
                 GUI.color = new Color(0.85f, 0.2f, 0.2f);
                 if (GUI.Button(new Rect(winX + winW - 36, winY + 3, 32, 26), "X"))
                 {
@@ -207,12 +212,12 @@ namespace QahwaKhatra.Cafe
                 }
                 GUI.color = Color.white;
 
-                // Browser Address Bar
+                // Address Bar
                 GUI.Box(new Rect(winX, winY + 32, winW, 32), "");
                 GUI.Label(new Rect(winX + 12, winY + 38, 65, 20), "Address:");
                 GUI.TextField(new Rect(winX + 80, winY + 36, winW - 95, 24), "http://www.derb-express.ma/store/clean_and_cafe");
 
-                // Webpage Content Body
+                // Content Body
                 GUI.color = Color.white;
                 GUI.DrawTexture(new Rect(winX, winY + 64, winW, winH - 64), Texture2D.whiteTexture);
 
@@ -228,25 +233,25 @@ namespace QahwaKhatra.Cafe
                 float item1Y = contentY + 55;
                 GUI.Box(new Rect(winX + 15, item1Y, winW - 30, 95), "");
                 GUI.Label(new Rect(winX + 25, item1Y + 10, winW - 190, 25), ArabicFixer.Fix("🪣 سطل وجفاف احترافي (Mop & Bucket Set)"));
-                GUI.Label(new Rect(winX + 25, item1Y + 38, winW - 190, 45), ArabicFixer.Fix("ضروري باش تسيق الغبرة وتوجد الكراج.\nالثمن: 30 درهم (30 DH)"));
+                GUI.Label(new Rect(winX + 25, item1Y + 38, winW - 190, 45), ArabicFixer.Fix("ضروري باش تسيق الغبرة وتوجد الكراج.\nالثمن: 30 درهم (التوصيل لباب الكراج)"));
 
                 if (!_hasBoughtMop)
                 {
-                    if (GUI.Button(new Rect(winX + winW - 165, item1Y + 25, 140, 45), ArabicFixer.Fix("شري دابا (30 DH)")))
+                    if (GUI.Button(new Rect(winX + winW - 165, item1Y + 25, 140, 45), ArabicFixer.Fix("طلب دابا (30 DH)")))
                     {
                         BuyMopAndBucket();
                     }
                 }
                 else
                 {
-                    GUI.Label(new Rect(winX + winW - 165, item1Y + 30, 140, 30), ArabicFixer.Fix("✅ تم الشراء!"));
+                    GUI.Label(new Rect(winX + winW - 165, item1Y + 30, 140, 30), ArabicFixer.Fix("📦 جاري التوصيل / وصل!"));
                 }
 
                 // ITEM 2: ESPRESSO MACHINE (آلة القهوة)
                 float item2Y = item1Y + 110;
                 GUI.Box(new Rect(winX + 15, item2Y, winW - 30, 110), "");
                 GUI.Label(new Rect(winX + 25, item2Y + 8, winW - 190, 25), ArabicFixer.Fix("☕ آلة إسبريسو كلاسيك (Classic Espresso Machine)"));
-                GUI.Label(new Rect(winX + 25, item2Y + 34, winW - 190, 65), ArabicFixer.Fix("القلب النابض ديال المقهى لتحضير قهوة خاترة.\n(خاص الأرضية تكون مسيقة كاملة عاد تشريها!)\nالثمن: 100 درهم (100 DH)"));
+                GUI.Label(new Rect(winX + 25, item2Y + 34, winW - 190, 65), ArabicFixer.Fix("القلب النابض ديال المقهى لتحضير قهوة خاترة.\n(خاص الأرضية تكون مسيقة كاملة عاد تشريها!)\nالثمن: 100 درهم (التوصيل لباب الكراج)"));
 
                 bool canBuyEspresso = _hasBoughtMop && CleaningManager.Instance != null && CleaningManager.Instance.CurrentPhase == Day1Phase.FloorCleanedBuyMachine;
 
@@ -254,7 +259,7 @@ namespace QahwaKhatra.Cafe
                 {
                     if (canBuyEspresso)
                     {
-                        if (GUI.Button(new Rect(winX + winW - 165, item2Y + 30, 140, 50), ArabicFixer.Fix("شري دابا (100 DH)")))
+                        if (GUI.Button(new Rect(winX + winW - 165, item2Y + 30, 140, 50), ArabicFixer.Fix("طلب دابا (100 DH)")))
                         {
                             BuyEspressoMachine();
                         }
@@ -267,7 +272,7 @@ namespace QahwaKhatra.Cafe
                 }
                 else
                 {
-                    GUI.Label(new Rect(winX + winW - 165, item2Y + 35, 140, 30), ArabicFixer.Fix("✅ تم الشراء!"));
+                    GUI.Label(new Rect(winX + winW - 165, item2Y + 35, 140, 30), ArabicFixer.Fix("📦 جاري التوصيل / وصل!"));
                 }
             }
 

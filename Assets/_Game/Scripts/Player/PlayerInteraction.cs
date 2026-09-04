@@ -71,11 +71,11 @@ namespace QahwaKhatra.Player
         {
             Collider[] hits = Physics.OverlapSphere(transform.position, _interactionRadius);
             
-            // Clean up lost interactables
+            // Clean up lost or destroyed interactables
             for (int j = _nearbyInteractables.Count - 1; j >= 0; j--)
             {
                 var item = _nearbyInteractables[j] as MonoBehaviour;
-                if (item == null || Vector3.Distance(transform.position, item.transform.position) > _interactionRadius + 0.3f)
+                if (item == null || !item.gameObject.activeInHierarchy || Vector3.Distance(transform.position, item.transform.position) > _interactionRadius + 0.3f)
                 {
                     _nearbyInteractables.RemoveAt(j);
                     if (_nearbyInteractables.Count == 0) OnInteractableLost?.Invoke();
@@ -86,6 +86,9 @@ namespace QahwaKhatra.Player
             {
                 if (hits[i].TryGetComponent<IInteractable>(out var interactable))
                 {
+                    var mb = interactable as MonoBehaviour;
+                    if (mb == null || !mb.gameObject.activeInHierarchy) continue;
+
                     // Only auto-collect items that are actual JunkItem!
                     if (_autoCollectJunk && hits[i].GetComponent<JunkItem>() != null)
                     {
@@ -112,20 +115,24 @@ namespace QahwaKhatra.Player
 
         private void OnGUI()
         {
-            // If near an interactable (like the Laptop), render an on-screen interact button!
+            // Do NOT render prompt if the full-screen Windows XP laptop is open!
+            var laptop = FindFirstObjectByType<QahwaKhatra.Cafe.LaptopShop>();
+            if (laptop != null && laptop.IsOpen) return;
+
+            // Render single unified interaction button only if valid prompt message exists!
             if (CurrentInteractable != null)
             {
                 string msg = CurrentInteractable.PromptMessage;
-                if (string.IsNullOrEmpty(msg)) return;
+                // DO NOT DRAW IF MESSAGE IS EMPTY OR WHITESPACE!
+                if (string.IsNullOrWhiteSpace(msg)) return;
 
-                float btnW = 260f;
+                float btnW = 280f;
                 float btnH = 65f;
                 float btnX = (Screen.width - btnW) / 2f;
-                float btnY = Screen.height - 110f;
+                float btnY = Screen.height - 100f;
 
-                // Glowing green/gold prompt button
                 GUI.color = new Color(0.2f, 0.85f, 0.3f);
-                if (GUI.Button(new Rect(btnX, btnY, btnW, btnH), $"💻 {msg}\n(Click or Press E / Space)"))
+                if (GUI.Button(new Rect(btnX, btnY, btnW, btnH), $"{msg}\n(Click or Press E / Space)"))
                 {
                     TriggerCurrentInteraction();
                 }
