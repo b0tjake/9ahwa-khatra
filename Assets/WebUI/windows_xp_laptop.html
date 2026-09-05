@@ -48,7 +48,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      transition: opacity 0.6s ease-out;
+      transition: opacity 0.5s ease-out;
     }
 
     .xp-bar-top, .xp-bar-bottom {
@@ -153,11 +153,18 @@
       gap: 20px;
       padding: 15px 25px;
       border-radius: 8px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.25);
       backdrop-filter: blur(4px);
       box-shadow: 0 8px 24px rgba(0,0,0,0.4);
       min-width: 440px;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .user-account-card:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-2px);
     }
 
     .user-avatar-box {
@@ -203,21 +210,21 @@
     .password-input-box {
       background: #fff;
       border: 2px solid #7f9db9;
-      height: 28px;
+      height: 30px;
       padding: 2px 10px;
       font-size: 18px;
       letter-spacing: 3px;
       font-family: Arial, sans-serif;
       color: #000;
-      border-radius: 2px;
-      width: 190px;
+      border-radius: 3px;
+      width: 200px;
       outline: none;
       box-shadow: inset 1px 1px 3px rgba(0,0,0,0.2);
     }
 
     .login-go-btn {
-      width: 28px;
-      height: 28px;
+      width: 32px;
+      height: 30px;
       border-radius: 4px;
       background: linear-gradient(to bottom, #44c767 0%, #2ca94a 100%);
       border: 1px solid #1e7d34;
@@ -226,14 +233,15 @@
       justify-content: center;
       color: #fff;
       font-weight: bold;
-      font-size: 14px;
+      font-size: 16px;
       cursor: pointer;
       box-shadow: 0 2px 5px rgba(0,0,0,0.3);
       transition: transform 0.1s, filter 0.1s;
     }
 
     .login-go-btn:hover {
-      filter: brightness(1.15);
+      filter: brightness(1.2);
+      transform: scale(1.05);
     }
 
     .login-go-btn:active {
@@ -263,7 +271,6 @@
       flex-direction: column;
     }
 
-    /* Authentic SVG Bliss Wallpaper */
     .bliss-wallpaper {
       position: absolute;
       top: 0;
@@ -275,7 +282,6 @@
       z-index: 1;
     }
 
-    /* Rolling Green Hills */
     .bliss-hill-back {
       position: absolute;
       bottom: 0;
@@ -299,7 +305,6 @@
       box-shadow: 0 -8px 25px rgba(0,0,0,0.15);
     }
 
-    /* Puffy Clouds */
     .cloud {
       position: absolute;
       background: rgba(255,255,255,0.75);
@@ -310,7 +315,6 @@
     .cloud-2 { top: 25%; left: 55%; width: 340px; height: 95px; }
     .cloud-3 { top: 10%; right: 10%; width: 200px; height: 60px; }
 
-    /* Desktop Icons Grid */
     .desktop-icons-area {
       position: absolute;
       top: 15px;
@@ -322,7 +326,7 @@
     }
 
     .desktop-icon {
-      width: 78px;
+      width: 85px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -435,8 +439,8 @@
 
     .taskbar-tab {
       height: 24px;
-      min-width: 150px;
-      max-width: 200px;
+      min-width: 160px;
+      max-width: 220px;
       background: linear-gradient(to bottom, #3c81e3 0%, #1c52b5 100%);
       border: 1px solid #133a82;
       border-radius: 3px;
@@ -474,10 +478,10 @@
     /* ---------------------------------------------------- */
     .xp-window {
       position: absolute;
-      top: 35px;
-      left: 70px;
-      right: 70px;
-      bottom: 50px;
+      top: 30px;
+      left: 50px;
+      right: 50px;
+      bottom: 45px;
       background: var(--xp-win-bg);
       border-top-left-radius: 8px;
       border-top-right-radius: 8px;
@@ -662,7 +666,6 @@
       flex-direction: column;
     }
 
-    /* Top Announcement Bar */
     .shop-notice-bar {
       background: #c91818;
       color: #fff;
@@ -677,7 +680,6 @@
       box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     }
 
-    /* Shop Header */
     .shop-header {
       background: #ffffff;
       border-bottom: 1px solid #e0e4eb;
@@ -733,7 +735,6 @@
       box-shadow: 0 4px 12px rgba(18,161,92,0.25);
     }
 
-    /* Category Navigation */
     .shop-categories-nav {
       background: #fff;
       border-bottom: 1px solid #e2e8f0;
@@ -765,7 +766,6 @@
       background: #fafafa;
     }
 
-    /* Products Container */
     .shop-main-content {
       padding: 24px;
       max-width: 1100px;
@@ -806,7 +806,6 @@
       grid-gap: 20px;
     }
 
-    /* Professional Product Card */
     .product-card {
       background: #fff;
       border: 1px solid #e2e8f0;
@@ -825,13 +824,13 @@
     }
 
     .product-img-header {
-      height: 170px;
+      height: 160px;
       background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
-      font-size: 70px;
+      font-size: 64px;
     }
 
     .prod-badge {
@@ -950,7 +949,6 @@
       cursor: default;
     }
 
-    /* Live Toast Notification */
     #delivery-toast {
       position: fixed;
       bottom: 45px;
@@ -973,19 +971,10 @@
       transform: translateY(0);
     }
 
-    .toast-icon {
-      font-size: 28px;
-    }
-    .toast-title {
-      font-weight: bold;
-      font-size: 14px;
-    }
-    .toast-desc {
-      font-size: 12px;
-      color: #94a3b8;
-    }
+    .toast-icon { font-size: 28px; }
+    .toast-title { font-weight: bold; font-size: 14px; }
+    .toast-desc { font-size: 12px; color: #94a3b8; }
 
-    /* Start Menu */
     #xp-start-menu {
       position: absolute;
       bottom: 30px;
@@ -1012,7 +1001,6 @@
       color: #fff;
       font-size: 15px;
       font-weight: bold;
-      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.2);
     }
 
     .start-menu-avatar {
@@ -1116,30 +1104,35 @@
     <div class="login-center-content">
       <div class="login-left-instruction">
         To begin, click your user name<br>
-        <span style="font-size: 14px; color: #b3d1ff; font-weight: normal;">للبدء، يتم تسجيل الدخول تلقائياً...</span>
+        <span style="font-size: 14px; color: #b3d1ff; font-weight: normal;">اضغط على اسم المستخدم أو زر السهم للدخول ➔</span>
       </div>
 
       <div class="login-divider-line"></div>
 
       <div class="login-user-container">
-        <div class="user-account-card">
+        <!-- Clicking anywhere on the user card or arrow logs in -->
+        <div class="user-account-card" id="user-card" onclick="submitLogin()" title="Click to Log On">
           <div class="user-avatar-box">☕</div>
           <div class="user-details">
             <div class="user-name-label">Derb Sultan Barista (قهوجي الدرب)</div>
             <div class="user-sub-label">Café Khatra • Derb Sultan, Casablanca</div>
-            <div class="password-input-row">
-              <input type="password" id="xp-password-field" class="password-input-box" readonly placeholder="••••••••">
-              <button id="xp-login-go" class="login-go-btn" title="Log On">➔</button>
+            <div class="password-input-row" onclick="event.stopPropagation()">
+              <input type="text" id="xp-password-field" class="password-input-box" placeholder="••••••••" value="">
+              <button id="xp-login-go" class="login-go-btn" title="Log On" onclick="submitLogin()">➔</button>
             </div>
             <div id="login-status" class="login-status-msg">Auto-authenticating user credentials...</div>
           </div>
         </div>
+
+        <button onclick="submitLogin()" style="margin-top: 10px; background: rgba(255,255,255,0.18); border: 1px solid rgba(255,255,255,0.4); color: #fff; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 12px; align-self: flex-start;">
+          الدخول السريع لسطح المكتب (Log On Now ➔)
+        </button>
       </div>
     </div>
 
     <div class="xp-bar-bottom">
       <div style="color: #adc8ff; font-size: 11px;">Derb Sultan Cyber OS v5.1 • 9ahwa Khatra Interactive Station</div>
-      <button class="win-ctrl-btn close" style="width: auto; padding: 4px 12px; height: 26px;" onclick="location.reload()">Restart Login 🔄</button>
+      <button class="win-ctrl-btn close" style="width: auto; padding: 4px 12px; height: 26px;" onclick="submitLogin()">Skip Login ➔</button>
     </div>
   </div>
 
@@ -1147,7 +1140,6 @@
   <!-- 2. WINDOWS XP DESKTOP                                   -->
   <!-- ======================================================== -->
   <div id="desktop">
-    <!-- Bliss Wallpaper Background -->
     <div class="bliss-wallpaper">
       <div class="cloud cloud-1"></div>
       <div class="cloud cloud-2"></div>
@@ -1156,9 +1148,8 @@
       <div class="bliss-hill-front"></div>
     </div>
 
-    <!-- Desktop Icons -->
     <div class="desktop-icons-area">
-      <div class="desktop-icon" id="icon-ie" ondblclick="openInternetExplorer()" onclick="selectIcon(this)">
+      <div class="desktop-icon selected" id="icon-ie" onclick="openInternetExplorer()" ondblclick="openInternetExplorer()">
         <div class="desktop-icon-img">🌐</div>
         <div class="desktop-icon-label">Internet Explorer</div>
       </div>
@@ -1234,16 +1225,12 @@
         <div class="ie-go-btn" onclick="playClickSound()">➡ Go</div>
       </div>
 
-      <!-- ---------------------------------------------------- -->
-      <!-- PRO SHOP CONTENT VIEWPORT                            -->
-      <!-- ---------------------------------------------------- */ -->
+      <!-- PRO SHOP CONTENT -->
       <div class="shop-viewport">
-        <!-- Notice Banner -->
         <div class="shop-notice-bar">
           <span>🚚 التوصيل مجاني وفوري إلى باب الكراج بدرب السلطان، الدار البيضاء | دعم فني متواصل 24/7</span>
         </div>
 
-        <!-- Shop Header -->
         <div class="shop-header">
           <div class="shop-brand">
             <div class="shop-brand-icon">🛒</div>
@@ -1259,7 +1246,6 @@
           </div>
         </div>
 
-        <!-- Category Tabs -->
         <div class="shop-categories-nav">
           <div class="cat-tab active" onclick="playClickSound()">🌟 جميع المعدات (All)</div>
           <div class="cat-tab" onclick="playClickSound()">🧹 معدات النظافة (Cleaning)</div>
@@ -1267,9 +1253,7 @@
           <div class="cat-tab" onclick="playClickSound()">🍵 لوازم الشاي المغربي (Tea)</div>
         </div>
 
-        <!-- Main Content -->
         <div class="shop-main-content">
-          <!-- Day 1 Mission Card -->
           <div class="day-mission-banner">
             <div>
               <div class="mission-text-title">
@@ -1283,7 +1267,6 @@
             <div style="font-size: 38px;">📦</div>
           </div>
 
-          <!-- Product Catalog -->
           <div class="products-grid">
             
             <!-- PRODUCT 1: MOP & BUCKET -->
@@ -1342,7 +1325,7 @@
               </div>
             </div>
 
-            <!-- PRODUCT 3: COMMERCIAL GRINDER (TEASER) -->
+            <!-- PRODUCT 3: GRINDER -->
             <div class="product-card" style="opacity: 0.85;">
               <div class="product-img-header">
                 ⚙️
@@ -1369,7 +1352,7 @@
               </div>
             </div>
 
-            <!-- PRODUCT 4: MOROCCAN TEA SERVICE (TEASER) -->
+            <!-- PRODUCT 4: TEA SET -->
             <div class="product-card" style="opacity: 0.85;">
               <div class="product-img-header">
                 🍵
@@ -1482,38 +1465,36 @@
     </div>
   </div>
 
-  <!-- ======================================================== -->
-  <!-- JAVASCRIPT: AUDIO SYNTH, AUTO-LOGIN, AND SHOP LOGIC      -->
-  <!-- ======================================================== -->
   <script>
     // ----------------------------------------------------
-    // 1. WEB AUDIO SYNTHESIZER (No external audio files needed)
+    // 1. AUDIO SYNTHESIS
     // ----------------------------------------------------
-    const AudioContext = window.AudioContext || window.webkitAudioContext;
     let audioCtx = null;
-
     function getAudioContext() {
-      if (!audioCtx) {
-        audioCtx = new AudioContext();
-      }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (AudioContextClass) audioCtx = new AudioContextClass();
+        }
+        if (audioCtx && audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+      } catch (e) {}
       return audioCtx;
     }
 
-    // Windows XP Startup Sound (Iconic 5-note harmonic chord)
     function playXpStartupSound() {
       try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const now = ctx.currentTime;
         const notes = [
-          { f: 277.18, t: 0.00, d: 2.5 }, // Db4
-          { f: 415.30, t: 0.15, d: 2.5 }, // Ab4
-          { f: 622.25, t: 0.35, d: 2.8 }, // Eb5
-          { f: 830.61, t: 0.55, d: 3.0 }, // Ab5
-          { f: 932.33, t: 0.75, d: 3.2 }, // Bb5
-          { f: 1396.91, t: 0.95, d: 3.5 } // F6
+          { f: 277.18, t: 0.00, d: 2.2 },
+          { f: 415.30, t: 0.12, d: 2.2 },
+          { f: 622.25, t: 0.28, d: 2.5 },
+          { f: 830.61, t: 0.44, d: 2.7 },
+          { f: 932.33, t: 0.60, d: 2.8 },
+          { f: 1396.91, t: 0.78, d: 3.0 }
         ];
 
         notes.forEach(n => {
@@ -1521,121 +1502,137 @@
           const gain = ctx.createGain();
           osc.type = 'sine';
           osc.frequency.setValueAtTime(n.f, now + n.t);
-
           gain.gain.setValueAtTime(0, now + n.t);
-          gain.gain.linearRampToValueAtTime(0.12, now + n.t + 0.1);
+          gain.gain.linearRampToValueAtTime(0.1, now + n.t + 0.08);
           gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
-
           osc.connect(gain);
           gain.connect(ctx.destination);
-
           osc.start(now + n.t);
           osc.stop(now + n.t + n.d);
         });
-      } catch (e) {
-        console.log("Audio not allowed yet", e);
-      }
+      } catch (e) {}
     }
 
-    // Classic Windows XP Click Sound
     function playClickSound() {
       try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const now = ctx.currentTime;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = 'triangle';
-        osc.frequency.setValueAtTime(1200, now);
-        osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
-
-        gain.gain.setValueAtTime(0.08, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
-
+        osc.frequency.setValueAtTime(1100, now);
+        osc.frequency.exponentialRampToValueAtTime(350, now + 0.035);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
         osc.connect(gain);
         gain.connect(ctx.destination);
         osc.start(now);
-        osc.stop(now + 0.04);
+        osc.stop(now + 0.035);
       } catch (e) {}
     }
 
-    // Cash Register "Cha-Ching" Purchase Sound
     function playCashSound() {
       try {
         const ctx = getAudioContext();
+        if (!ctx) return;
         const now = ctx.currentTime;
-        
-        // Bell ding 1
         const osc1 = ctx.createOscillator();
         const gain1 = ctx.createGain();
         osc1.frequency.setValueAtTime(1800, now);
-        gain1.gain.setValueAtTime(0.2, now);
-        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        gain1.gain.setValueAtTime(0.18, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
         osc1.connect(gain1);
         gain1.connect(ctx.destination);
         osc1.start(now);
-        osc1.stop(now + 0.6);
+        osc1.stop(now + 0.5);
 
-        // Bell ding 2 (higher)
         const osc2 = ctx.createOscillator();
         const gain2 = ctx.createGain();
-        osc2.frequency.setValueAtTime(2400, now + 0.12);
-        gain2.gain.setValueAtTime(0.25, now + 0.12);
-        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+        osc2.frequency.setValueAtTime(2400, now + 0.1);
+        gain2.gain.setValueAtTime(0.2, now + 0.1);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.7);
         osc2.connect(gain2);
         gain2.connect(ctx.destination);
-        osc2.start(now + 0.12);
-        osc2.stop(now + 0.8);
+        osc2.start(now + 0.1);
+        osc2.stop(now + 0.7);
       } catch (e) {}
     }
 
     // ----------------------------------------------------
-    // 2. AUTO-TYPING LOGIN SYSTEM
+    // 2. BULLETPROOF AUTO-LOGIN & INSTANT SUBMIT
     // ----------------------------------------------------
     const passwordInput = document.getElementById('xp-password-field');
     const loginStatus = document.getElementById('login-status');
     const loginGoBtn = document.getElementById('xp-login-go');
     const loginScreen = document.getElementById('login-screen');
+    const ieWindow = document.getElementById('ie-window');
 
-    const samplePassword = "••••••••";
-    let typeIndex = 0;
+    let hasLoggedIn = false;
+    let typeTimer = null;
 
-    function runAutoLogin() {
-      typeIndex = 0;
-      passwordInput.value = "";
-      loginStatus.textContent = "Entering password...";
+    function submitLogin() {
+      if (hasLoggedIn) return;
+      hasLoggedIn = true;
 
-      const typeInterval = setInterval(() => {
-        if (typeIndex < samplePassword.length) {
-          passwordInput.value += "•";
-          playClickSound();
-          typeIndex++;
-        } else {
-          clearInterval(typeInterval);
-          setTimeout(() => {
-            // Trigger Submit Click
-            loginGoBtn.style.transform = "scale(0.92)";
-            playClickSound();
-            setTimeout(() => {
-              loginGoBtn.style.transform = "scale(1)";
-              loginStatus.textContent = "Loading your personal settings (جاري تحميل الإعدادات)...";
-              playXpStartupSound();
+      if (typeTimer) clearInterval(typeTimer);
 
-              // Fade out login screen and reveal desktop
-              setTimeout(() => {
-                loginScreen.style.opacity = '0';
-                setTimeout(() => {
-                  loginScreen.style.display = 'none';
-                }, 600);
-              }, 1200);
-            }, 250);
-          }, 400);
-        }
-      }, 140);
+      passwordInput.value = "••••••••";
+      loginStatus.textContent = "Loading your personal settings (جاري الدخول لسطح المكتب)...";
+      loginGoBtn.style.transform = "scale(0.92)";
+
+      playClickSound();
+      playXpStartupSound();
+
+      setTimeout(() => {
+        loginGoBtn.style.transform = "scale(1)";
+        loginScreen.style.opacity = '0';
+        setTimeout(() => {
+          loginScreen.style.display = 'none';
+          openInternetExplorer();
+        }, 500);
+      }, 700);
     }
 
-    // Start auto login after 600ms on load
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(runAutoLogin, 600);
+    function runAutoLogin() {
+      let count = 0;
+      passwordInput.value = "";
+      loginStatus.textContent = "Entering password (كتابة كلمة المرور تلقائياً)...";
+
+      typeTimer = setInterval(() => {
+        if (hasLoggedIn) {
+          clearInterval(typeTimer);
+          return;
+        }
+
+        if (count < 8) {
+          passwordInput.value += "•";
+          playClickSound();
+          count++;
+        } else {
+          clearInterval(typeTimer);
+          setTimeout(() => {
+            if (!hasLoggedIn) submitLogin();
+          }, 350);
+        }
+      }, 110);
+    }
+
+    // Start auto-typing immediately
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => setTimeout(runAutoLogin, 250));
+    } else {
+      setTimeout(runAutoLogin, 250);
+    }
+
+    // Keyboard support: Pressing Enter or Space triggers instant login
+    document.addEventListener('keydown', (e) => {
+      if (loginScreen.style.display !== 'none') {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          submitLogin();
+        }
+      }
     });
 
     // ----------------------------------------------------
@@ -1649,7 +1646,8 @@
       hours = hours % 12;
       hours = hours ? hours : 12;
       const str = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
-      document.getElementById('system-clock').textContent = str;
+      const el = document.getElementById('system-clock');
+      if (el) el.textContent = str;
     }
     setInterval(updateClock, 1000);
     updateClock();
@@ -1676,7 +1674,6 @@
       }
     });
 
-    const ieWindow = document.getElementById('ie-window');
     const taskbarTab = document.getElementById('taskbar-ie-tab');
 
     function openInternetExplorer() {
@@ -1711,10 +1708,11 @@
 
     function logOff() {
       playClickSound();
+      hasLoggedIn = false;
       startMenu.style.display = 'none';
       loginScreen.style.display = 'flex';
       loginScreen.style.opacity = '1';
-      setTimeout(runAutoLogin, 600);
+      setTimeout(runAutoLogin, 400);
     }
 
     function turnOff() {
@@ -1724,11 +1722,11 @@
     }
 
     // ----------------------------------------------------
-    // 4. DERB EXPRESS SHOPPING & PROGRESSION SYSTEM
+    // 4. DERB EXPRESS SHOPPING SYSTEM
     // ----------------------------------------------------
     let userWallet = 100;
     let boughtMop = false;
-    let floorCleaned = false; // toggled after mop purchase
+    let floorCleaned = false;
     let boughtEspresso = false;
 
     const walletDisplay = document.getElementById('wallet-balance');
@@ -1767,7 +1765,6 @@
         "خرج الصندوق الآن ووصل خارج باب الكراج! اخرج لفتحه وبدء تسييق الأرضية."
       );
 
-      // Simulate floor cleaning ready after acquiring mop
       setTimeout(() => {
         floorCleaned = true;
         btnBuyEspresso.className = "buy-btn buy-btn-active";
@@ -1776,7 +1773,7 @@
           "الأرضية أصبحت جاهزة! ✨",
           "تم تسييق الكراج بالكامل. يمكنك الآن شراء آلة الإسبريسو الكلاسيكية!"
         );
-      }, 3500);
+      }, 3000);
     }
 
     function buyEspresso() {
@@ -1786,7 +1783,6 @@
         return;
       }
       if (userWallet < 100) {
-        // Barista discount if needed or allow purchase
         userWallet = 100;
       }
 

@@ -34,6 +34,10 @@ namespace QahwaKhatra.Player
 
         private void Update()
         {
+            // If laptop is open, do not handle interaction keys so player can interact with Windows XP UI
+            var laptop = FindFirstObjectByType<QahwaKhatra.Cafe.LaptopShop>();
+            if (laptop != null && laptop.IsOpen) return;
+
             if (Keyboard.current != null)
             {
                 if (Keyboard.current.eKey.wasPressedThisFrame || Keyboard.current.spaceKey.wasPressedThisFrame)

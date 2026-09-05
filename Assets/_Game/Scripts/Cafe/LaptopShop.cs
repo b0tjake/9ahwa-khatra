@@ -57,10 +57,6 @@ namespace QahwaKhatra.Cafe
         {
             get
             {
-                if (CleaningManager.Instance != null && CleaningManager.Instance.CurrentPhase == Day1Phase.SellingJunk)
-                {
-                    return ArabicFixer.Fix("خوي الخردة عاد خدم البيسي (Clear junk first!)");
-                }
                 return ArabicFixer.Fix("حل البيسي (USE LAPTOP)");
             }
         }
@@ -73,12 +69,6 @@ namespace QahwaKhatra.Cafe
 
         public void OnInteract(PlayerInteraction interactor)
         {
-            if (CleaningManager.Instance != null && CleaningManager.Instance.CurrentPhase == Day1Phase.SellingJunk)
-            {
-                Debug.Log("[Laptop] Clear and sell the junk in the garage first before using the computer!");
-                return;
-            }
-
             _isOpen = !_isOpen;
             if (_isOpen)
             {
@@ -95,6 +85,10 @@ namespace QahwaKhatra.Cafe
         {
             if (!_isOpen) return;
 
+            // Ensure mouse cursor is visible and unlocked so player can use the PC
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+
             // Allow quick exit with Escape key
             if (Input.GetKeyDown(KeyCode.Escape))
             {
@@ -103,11 +97,21 @@ namespace QahwaKhatra.Cafe
                 return;
             }
 
-            // 1. AUTO-LOGIN SEQUENCE
+            // Keyboard instant login support
+            if (_osState == WindowsXPState.LoginTypingPassword || _osState == WindowsXPState.LoginSubmitting)
+            {
+                if (Input.GetKeyDown(KeyCode.Return) || Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Space))
+                {
+                    SubmitLoginNow();
+                    return;
+                }
+            }
+
+            // 1. AUTO-LOGIN SEQUENCE (Snappy & Reliable)
             if (_osState == WindowsXPState.LoginTypingPassword)
             {
                 _passwordTimer += Time.deltaTime;
-                if (_passwordTimer >= 0.14f && _typedPassword.Length < _targetPasswordLength)
+                if (_passwordTimer >= 0.08f && _typedPassword.Length < _targetPasswordLength)
                 {
                     _passwordTimer = 0f;
                     _typedPassword += "•";
@@ -116,22 +120,17 @@ namespace QahwaKhatra.Cafe
                 else if (_typedPassword.Length >= _targetPasswordLength)
                 {
                     _passwordTimer += Time.deltaTime;
-                    if (_passwordTimer >= 0.4f)
+                    if (_passwordTimer >= 0.25f)
                     {
-                        // Submit password automatically!
-                        _osState = WindowsXPState.LoginSubmitting;
-                        _loginSubmittingTimer = 0f;
-                        PlaySound(_clickClip);
-                        PlaySound(_startupClip);
+                        SubmitLoginNow();
                     }
                 }
             }
             else if (_osState == WindowsXPState.LoginSubmitting)
             {
                 _loginSubmittingTimer += Time.deltaTime;
-                if (_loginSubmittingTimer >= 1.4f)
+                if (_loginSubmittingTimer >= 0.6f)
                 {
-                    // Transition to Desktop!
                     _osState = WindowsXPState.Desktop;
                 }
             }
@@ -143,9 +142,23 @@ namespace QahwaKhatra.Cafe
             }
         }
 
+        public void SubmitLoginNow()
+        {
+            _typedPassword = "••••••••";
+            _osState = WindowsXPState.Desktop;
+            PlaySound(_clickClip);
+            PlaySound(_startupClip);
+        }
+
         public void BuyMopAndBucket()
         {
             if (_hasBoughtMop) return;
+
+            if (CleaningManager.Instance != null && CleaningManager.Instance.CurrentPhase == Day1Phase.SellingJunk)
+            {
+                ShowToast("خاصك تخوي الخردة أولاً!", "بيع الخردة اللي ف الكراج عاد تقدر تبدا الطلبات.");
+                return;
+            }
 
             float currentCash = CurrencyManager.Instance != null ? CurrencyManager.Instance.CurrentDirhams : 100f;
             if (currentCash < 30f)
@@ -364,9 +377,15 @@ namespace QahwaKhatra.Cafe
             // User Card Box
             float cardX = cx + 20;
             float cardY = cy - 75;
-            GUI.color = new Color(1f, 1f, 1f, 0.12f);
+            GUI.color = new Color(1f, 1f, 1f, 0.15f);
             GUI.DrawTexture(new Rect(cardX, cardY, 440, 140), Texture2D.whiteTexture);
             GUI.color = Color.white;
+
+            // Clickable card area to log in immediately
+            if (GUI.Button(new Rect(cardX, cardY, 440, 140), "", GUIStyle.none))
+            {
+                SubmitLoginNow();
+            }
 
             // Avatar Frame
             GUI.color = new Color(0.1f, 0.45f, 0.8f);
@@ -408,13 +427,19 @@ namespace QahwaKhatra.Cafe
             };
             GUI.TextField(new Rect(cardX + 175, cardY + 66, 175, 26), _typedPassword, passBoxStyle);
 
-            // Green submit button
+            // Green submit button - instant login
             GUI.color = new Color(0.2f, 0.78f, 0.3f);
             if (GUI.Button(new Rect(cardX + 358, cardY + 65, 36, 28), "➔"))
             {
-                _osState = WindowsXPState.LoginSubmitting;
-                _loginSubmittingTimer = 0f;
-                PlaySound(_startupClip);
+                SubmitLoginNow();
+            }
+            GUI.color = Color.white;
+
+            // Direct button under card to guarantee user can always enter immediately
+            GUI.color = new Color(0.2f, 0.5f, 0.9f);
+            if (GUI.Button(new Rect(cardX, cardY + 150, 250, 32), ArabicFixer.Fix("الدخول لسطح المكتب (Log On Now ➔)")))
+            {
+                SubmitLoginNow();
             }
             GUI.color = Color.white;
 
