@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windows XP Professional - Café Khatra Edition</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    body, html {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Tahoma', 'Segoe UI', Arial, sans-serif;
+      font-size: 11px;
+      background: #000;
+      color: #222;
+    }
+
+    /* XP COLOR PALETTE & GRADIENTS */
+    :root {
+      --xp-blue: #0055ea;
+      --xp-dark-blue: #00138c;
+      --xp-title-start: #0a246a;
+      --xp-title-end: #a6caf0;
+      --xp-taskbar: linear-gradient(to bottom, #1f2f86 0%, #3165c4 3%, #3682ea 6%, #215fc3 8%, #1f50ac 12%, #1a4192 18%, #17387f 21%, #153272 26%, #132b63 32%, #12285d 39%, #132b64 50%, #153375 58%, #17387f 65%, #193e8d 71%, #1a4396 77%, #1a4294 84%, #193b82 89%, #153270 94%, #12285b 97%, #0e1f46 100%);
+      --xp-start-btn: linear-gradient(to bottom, #388238 0%, #46a746 5%, #469a46 15%, #3d8c3d 25%, #388238 45%, #2a682a 75%, #1c4b1c 100%);
+      --xp-win-bg: #ece9d8;
+    }
+
+    /* ---------------------------------------------------- */
+    /* 1. AUTO LOGIN SCREEN                                 */
+    /* ---------------------------------------------------- */
+    #login-screen {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at center, #003882 0%, #001a4e 100%);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: opacity 0.6s ease-out;
+    }
+
+    .xp-bar-top, .xp-bar-bottom {
+      height: 70px;
+      background: #00133b;
+      display: flex;
+      align-items: center;
+      padding: 0 40px;
+      position: relative;
+    }
+
+    .xp-bar-top {
+      border-bottom: 2px solid #ea9000;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+    }
+
+    .xp-bar-bottom {
+      border-top: 2px solid #ea9000;
+      justify-content: space-between;
+    }
+
+    .windows-logo-header {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .win-flag {
+      display: grid;
+      grid-template-columns: 14px 14px;
+      grid-gap: 3px;
+      transform: skew(-10deg, -5deg);
+    }
+    .win-flag span {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+      box-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    }
+    .win-flag .f-red { background: #f25022; }
+    .win-flag .f-green { background: #7fba00; }
+    .win-flag .f-blue { background: #00a4ef; }
+    .win-flag .f-yellow { background: #ffb900; }
+
+    .win-title-text {
+      color: #fff;
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+
+    .win-title-sub {
+      color: #ff9900;
+      font-size: 14px;
+      font-weight: normal;
+      margin-left: 8px;
+      font-style: italic;
+    }
+
+    .login-center-content {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .login-divider-line {
+      position: absolute;
+      top: 10%;
+      bottom: 10%;
+      left: 45%;
+      width: 2px;
+      background: linear-gradient(to bottom, transparent, rgba(255,255,255,0.7), transparent);
+    }
+
+    .login-left-instruction {
+      position: absolute;
+      left: 15%;
+      width: 28%;
+      color: #fff;
+      font-size: 22px;
+      line-height: 1.4;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+      text-align: right;
+      padding-right: 30px;
+    }
+
+    .login-user-container {
+      position: absolute;
+      left: 50%;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .user-account-card {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 15px 25px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.15);
+      backdrop-filter: blur(4px);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+      min-width: 440px;
+    }
+
+    .user-avatar-box {
+      width: 68px;
+      height: 68px;
+      border-radius: 6px;
+      border: 3px solid #ffcc00;
+      background: linear-gradient(135deg, #165b33, #187bcd);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+    }
+
+    .user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    .user-name-label {
+      color: #fff;
+      font-size: 19px;
+      font-weight: bold;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.9);
+      letter-spacing: 0.3px;
+    }
+
+    .user-sub-label {
+      color: #adc8ff;
+      font-size: 12px;
+    }
+
+    .password-input-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .password-input-box {
+      background: #fff;
+      border: 2px solid #7f9db9;
+      height: 28px;
+      padding: 2px 10px;
+      font-size: 18px;
+      letter-spacing: 3px;
+      font-family: Arial, sans-serif;
+      color: #000;
+      border-radius: 2px;
+      width: 190px;
+      outline: none;
+      box-shadow: inset 1px 1px 3px rgba(0,0,0,0.2);
+    }
+
+    .login-go-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      background: linear-gradient(to bottom, #44c767 0%, #2ca94a 100%);
+      border: 1px solid #1e7d34;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: bold;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+      transition: transform 0.1s, filter 0.1s;
+    }
+
+    .login-go-btn:hover {
+      filter: brightness(1.15);
+    }
+
+    .login-go-btn:active {
+      transform: scale(0.92);
+      filter: brightness(0.9);
+    }
+
+    .login-status-msg {
+      color: #ffe680;
+      font-size: 13px;
+      font-style: italic;
+      height: 18px;
+    }
+
+    /* ---------------------------------------------------- */
+    /* 2. WINDOWS XP DESKTOP & BLISS BACKGROUND             */
+    /* ---------------------------------------------------- */
+    #desktop {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #3a6ea5;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Authentic SVG Bliss Wallpaper */
+    .bliss-wallpaper {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: calc(100% - 30px);
+      background: linear-gradient(to bottom, #2b70d4 0%, #5ba7ea 40%, #85c2f5 60%, #b8e0fc 75%, #dcf1fe 85%);
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    /* Rolling Green Hills */
+    .bliss-hill-back {
+      position: absolute;
+      bottom: 0;
+      left: -20%;
+      width: 140%;
+      height: 48%;
+      background: radial-gradient(ellipse at 50% 100%, #5da914 0%, #3e7f09 60%, #2c6004 100%);
+      border-radius: 60% 60% 0 0;
+      transform: rotate(-3deg);
+    }
+
+    .bliss-hill-front {
+      position: absolute;
+      bottom: -8%;
+      left: -10%;
+      width: 130%;
+      height: 42%;
+      background: radial-gradient(ellipse at 40% 90%, #82c823 0%, #589e10 50%, #3a7206 100%);
+      border-radius: 50% 50% 0 0;
+      transform: rotate(2deg);
+      box-shadow: 0 -8px 25px rgba(0,0,0,0.15);
+    }
+
+    /* Puffy Clouds */
+    .cloud {
+      position: absolute;
+      background: rgba(255,255,255,0.75);
+      border-radius: 100px;
+      filter: blur(12px);
+    }
+    .cloud-1 { top: 15%; left: 20%; width: 260px; height: 75px; }
+    .cloud-2 { top: 25%; left: 55%; width: 340px; height: 95px; }
+    .cloud-3 { top: 10%; right: 10%; width: 200px; height: 60px; }
+
+    /* Desktop Icons Grid */
+    .desktop-icons-area {
+      position: absolute;
+      top: 15px;
+      left: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      z-index: 10;
+    }
+
+    .desktop-icon {
+      width: 78px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      padding: 6px 4px;
+      border: 1px solid transparent;
+      border-radius: 4px;
+      text-align: center;
+      transition: background 0.1s;
+    }
+
+    .desktop-icon:hover {
+      background: rgba(11, 95, 215, 0.25);
+      border: 1px solid rgba(11, 95, 215, 0.4);
+    }
+
+    .desktop-icon.selected {
+      background: rgba(11, 95, 215, 0.45);
+      border: 1px dotted rgba(255, 255, 255, 0.8);
+    }
+
+    .desktop-icon-img {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+      filter: drop-shadow(2px 3px 3px rgba(0,0,0,0.4));
+    }
+
+    .desktop-icon-label {
+      color: #fff;
+      font-size: 11px;
+      text-shadow: 1px 1px 2px #000, -1px -1px 2px #000, 1px -1px 2px #000, -1px 1px 2px #000;
+      line-height: 1.2;
+      word-break: break-word;
+    }
+
+    /* ---------------------------------------------------- */
+    /* 3. LUNA BLUE TASKBAR                                 */
+    /* ---------------------------------------------------- */
+    .xp-taskbar {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 30px;
+      background: var(--xp-taskbar);
+      z-index: 500;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 -1px 2px rgba(0,0,0,0.3);
+    }
+
+    .xp-start-btn {
+      height: 30px;
+      padding: 0 16px 0 10px;
+      background: var(--xp-start-btn);
+      border-top-right-radius: 14px;
+      border-bottom-right-radius: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      box-shadow: inset 1px 1px 1px #80d080, 2px 0 5px rgba(0,0,0,0.4);
+      transition: filter 0.15s;
+    }
+
+    .xp-start-btn:hover {
+      filter: brightness(1.15);
+    }
+
+    .xp-start-btn:active {
+      filter: brightness(0.9);
+      box-shadow: inset 1px 1px 2px #103510;
+    }
+
+    .start-logo {
+      display: grid;
+      grid-template-columns: 8px 8px;
+      grid-gap: 2px;
+      transform: skew(-10deg, -5deg);
+    }
+    .start-logo span {
+      width: 8px;
+      height: 8px;
+      border-radius: 1px;
+    }
+
+    .start-text {
+      color: #fff;
+      font-size: 14px;
+      font-weight: 900;
+      font-style: italic;
+      text-shadow: 1px 1px 2px #1c4b1c;
+      letter-spacing: 0.5px;
+    }
+
+    .taskbar-tasks-row {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 4px;
+      overflow-x: auto;
+    }
+
+    .taskbar-tab {
+      height: 24px;
+      min-width: 150px;
+      max-width: 200px;
+      background: linear-gradient(to bottom, #3c81e3 0%, #1c52b5 100%);
+      border: 1px solid #133a82;
+      border-radius: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 8px;
+      color: #fff;
+      font-size: 11px;
+      cursor: pointer;
+      box-shadow: inset 1px 1px 1px rgba(255,255,255,0.3);
+    }
+
+    .taskbar-tab.active {
+      background: linear-gradient(to bottom, #19469d 0%, #2864c9 100%);
+      box-shadow: inset 1px 1px 3px rgba(0,0,0,0.5);
+      border-color: #0b224d;
+    }
+
+    .xp-system-tray {
+      height: 100%;
+      background: linear-gradient(to bottom, #0c59b8 0%, #1279e8 50%, #0c59b8 100%);
+      border-left: 1px solid #174092;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #fff;
+      font-size: 11px;
+      box-shadow: inset 1px 0 2px rgba(0,0,0,0.3);
+    }
+
+    /* ---------------------------------------------------- */
+    /* 4. INTERNET EXPLORER 6 WINDOW                        */
+    /* ---------------------------------------------------- */
+    .xp-window {
+      position: absolute;
+      top: 35px;
+      left: 70px;
+      right: 70px;
+      bottom: 50px;
+      background: var(--xp-win-bg);
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5), inset 0 0 0 1px #00138c, inset 0 0 0 2px #0831d9;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      overflow: hidden;
+    }
+
+    /* Title Bar */
+    .xp-title-bar {
+      height: 28px;
+      background: linear-gradient(to bottom, #0997ff 0%, #0053ee 8%, #0050ee 40%, #0066ff 88%, #005bff 95%, #003dd7 100%);
+      padding: 0 4px 0 8px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-top-left-radius: 7px;
+      border-top-right-radius: 7px;
+      cursor: move;
+    }
+
+    .xp-title-left {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 12px;
+      font-family: 'Trebuchet MS', Tahoma, sans-serif;
+      text-shadow: 1px 1px 1px #0f1089;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .xp-window-controls {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .win-ctrl-btn {
+      width: 21px;
+      height: 21px;
+      border-radius: 3px;
+      border: 1px solid #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 11px;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: inset 1px 1px 1px rgba(255,255,255,0.6);
+      background: linear-gradient(to bottom, #4282d6 0%, #1e52ad 100%);
+    }
+
+    .win-ctrl-btn.close {
+      background: linear-gradient(to bottom, #e87a6d 0%, #d83b27 50%, #ba200e 100%);
+    }
+
+    .win-ctrl-btn:hover {
+      filter: brightness(1.2);
+    }
+
+    /* IE Menu Bar */
+    .ie-menu-bar {
+      height: 22px;
+      background: #ece9d8;
+      border-bottom: 1px solid #dcdad5;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 12px;
+      color: #000;
+      font-size: 11px;
+    }
+
+    .ie-menu-bar span {
+      cursor: pointer;
+      padding: 1px 4px;
+    }
+    .ie-menu-bar span:hover {
+      background: #316ac5;
+      color: #fff;
+    }
+
+    /* IE Toolbar */
+    .ie-toolbar {
+      height: 38px;
+      background: #ece9d8;
+      border-bottom: 1px solid #d0ccc0;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 10px;
+    }
+
+    .ie-nav-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 6px;
+      border: 1px solid transparent;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 11px;
+      color: #222;
+    }
+    .ie-nav-btn:hover {
+      border: 1px solid #7f9db9;
+      background: #fdfdfd;
+      box-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .ie-separator {
+      width: 1px;
+      height: 24px;
+      background: #ccc;
+    }
+
+    /* Address Bar */
+    .ie-address-bar {
+      height: 28px;
+      background: #ece9d8;
+      border-bottom: 1px solid #999;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 8px;
+    }
+
+    .ie-address-label {
+      color: #555;
+      font-size: 11px;
+    }
+
+    .ie-address-input-wrapper {
+      flex: 1;
+      height: 22px;
+      background: #fff;
+      border: 1px solid #7f9db9;
+      display: flex;
+      align-items: center;
+      padding: 0 6px;
+      gap: 6px;
+    }
+
+    .ie-address-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-size: 11px;
+      font-family: Arial, sans-serif;
+      color: #111;
+    }
+
+    .ie-go-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      background: #ece9d8;
+      border: 1px solid #7f9db9;
+      cursor: pointer;
+      font-size: 11px;
+    }
+    .ie-go-btn:hover {
+      background: #e2dfcf;
+    }
+
+    /* ---------------------------------------------------- */
+    /* 5. PRO SHOP: "DERB EXPRESS" (درب إكسبريس)            */
+    /* ---------------------------------------------------- */
+    .shop-viewport {
+      flex: 1;
+      background: #f4f6f9;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Top Announcement Bar */
+    .shop-notice-bar {
+      background: #c91818;
+      color: #fff;
+      text-align: center;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    /* Shop Header */
+    .shop-header {
+      background: #ffffff;
+      border-bottom: 1px solid #e0e4eb;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .shop-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .shop-brand-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #c91818, #ff6b35);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 24px;
+      box-shadow: 0 4px 10px rgba(201,24,24,0.3);
+    }
+
+    .shop-brand-name {
+      font-size: 20px;
+      font-weight: 800;
+      color: #1a1e24;
+      letter-spacing: -0.5px;
+    }
+
+    .shop-brand-tagline {
+      font-size: 11px;
+      color: #718096;
+      margin-top: 2px;
+    }
+
+    .shop-wallet-badge {
+      background: linear-gradient(135deg, #0d7844, #12a15c);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(18,161,92,0.25);
+    }
+
+    /* Category Navigation */
+    .shop-categories-nav {
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
+      padding: 0 24px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .cat-tab {
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 600;
+      color: #4a5568;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .cat-tab.active {
+      color: #c91818;
+      border-bottom-color: #c91818;
+    }
+
+    .cat-tab:hover {
+      color: #c91818;
+      background: #fafafa;
+    }
+
+    /* Products Container */
+    .shop-main-content {
+      padding: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .day-mission-banner {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #fff;
+      border-radius: 12px;
+      padding: 18px 24px;
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 6px 18px rgba(37,99,235,0.2);
+    }
+
+    .mission-text-title {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mission-text-desc {
+      font-size: 13px;
+      color: #bfdbfe;
+      line-height: 1.4;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-gap: 20px;
+    }
+
+    /* Professional Product Card */
+    .product-card {
+      background: #fff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(0,0,0,0.08);
+    }
+
+    .product-img-header {
+      height: 170px;
+      background: linear-gradient(135deg, #f1f5f9, #e2e8f0);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      font-size: 70px;
+    }
+
+    .prod-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: bold;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    .badge-primary { background: #ef4444; color: #fff; }
+    .badge-success { background: #10b981; color: #fff; }
+    .badge-locked { background: #64748b; color: #fff; }
+
+    .product-info-body {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .prod-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .prod-subtitle {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 12px;
+    }
+
+    .prod-specs-list {
+      list-style: none;
+      margin-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .prod-specs-list li {
+      font-size: 12px;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .product-footer-action {
+      margin-top: auto;
+      border-top: 1px solid #f1f5f9;
+      padding-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .price-tag-wrap {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .price-main {
+      font-size: 22px;
+      font-weight: 800;
+      color: #c91818;
+    }
+
+    .price-delivery {
+      font-size: 11px;
+      color: #10b981;
+      font-weight: 600;
+    }
+
+    .buy-btn {
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s;
+    }
+
+    .buy-btn-active {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(16,185,129,0.3);
+    }
+    .buy-btn-active:hover {
+      filter: brightness(1.1);
+      transform: scale(1.02);
+    }
+    .buy-btn-active:active {
+      transform: scale(0.97);
+    }
+
+    .buy-btn-disabled {
+      background: #e2e8f0;
+      color: #94a3b8;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .buy-btn-bought {
+      background: #f1f5f9;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+      cursor: default;
+    }
+
+    /* Live Toast Notification */
+    #delivery-toast {
+      position: fixed;
+      bottom: 45px;
+      right: 25px;
+      background: #1e293b;
+      color: #fff;
+      border-left: 4px solid #10b981;
+      padding: 14px 20px;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      z-index: 9999;
+      transform: translateY(120px);
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    #delivery-toast.show {
+      transform: translateY(0);
+    }
+
+    .toast-icon {
+      font-size: 28px;
+    }
+    .toast-title {
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .toast-desc {
+      font-size: 12px;
+      color: #94a3b8;
+    }
+
+    /* Start Menu */
+    #xp-start-menu {
+      position: absolute;
+      bottom: 30px;
+      left: 0;
+      width: 320px;
+      background: #fff;
+      border-top-left-radius: 8px;
+      border-top-right-radius: 8px;
+      box-shadow: 3px -3px 15px rgba(0,0,0,0.5);
+      z-index: 600;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      border: 1px solid #00138c;
+    }
+
+    .start-menu-header {
+      height: 54px;
+      background: linear-gradient(to bottom, #1d5ec5 0%, #154593 100%);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 14px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: bold;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.2);
+    }
+
+    .start-menu-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      border: 2px solid #ffcc00;
+      background: #187bcd;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+    }
+
+    .start-menu-columns {
+      display: flex;
+      min-height: 240px;
+      background: #fff;
+    }
+
+    .start-col-left {
+      flex: 1.2;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .start-col-right {
+      flex: 1;
+      background: #d3e5fa;
+      border-left: 1px solid #95bdee;
+      padding: 8px 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .start-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 2px;
+      cursor: pointer;
+      font-size: 11px;
+      color: #222;
+    }
+
+    .start-item:hover {
+      background: #2f71cd;
+      color: #fff;
+    }
+
+    .start-menu-footer {
+      height: 44px;
+      background: linear-gradient(to bottom, #2b70d4 0%, #1c52b5 100%);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 14px;
+      gap: 12px;
+    }
+
+    .start-footer-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #fff;
+      font-size: 11px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 3px;
+    }
+    .start-footer-btn:hover {
+      background: rgba(255,255,255,0.15);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ======================================================== -->
+  <!-- 1. WINDOWS XP AUTO LOGIN SCREEN                         -->
+  <!-- ======================================================== -->
+  <div id="login-screen">
+    <div class="xp-bar-top">
+      <div class="windows-logo-header">
+        <div class="win-flag">
+          <span class="f-red"></span>
+          <span class="f-green"></span>
+          <span class="f-blue"></span>
+          <span class="f-yellow"></span>
+        </div>
+        <div class="win-title-text">
+          Microsoft Windows <span style="font-weight: 300;">XP</span>
+          <span class="win-title-sub">Professional</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="login-center-content">
+      <div class="login-left-instruction">
+        To begin, click your user name<br>
+        <span style="font-size: 14px; color: #b3d1ff; font-weight: normal;">للبدء، يتم تسجيل الدخول تلقائياً...</span>
+      </div>
+
+      <div class="login-divider-line"></div>
+
+      <div class="login-user-container">
+        <div class="user-account-card">
+          <div class="user-avatar-box">☕</div>
+          <div class="user-details">
+            <div class="user-name-label">Derb Sultan Barista (قهوجي الدرب)</div>
+            <div class="user-sub-label">Café Khatra • Derb Sultan, Casablanca</div>
+            <div class="password-input-row">
+              <input type="password" id="xp-password-field" class="password-input-box" readonly placeholder="••••••••">
+              <button id="xp-login-go" class="login-go-btn" title="Log On">➔</button>
+            </div>
+            <div id="login-status" class="login-status-msg">Auto-authenticating user credentials...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="xp-bar-bottom">
+      <div style="color: #adc8ff; font-size: 11px;">Derb Sultan Cyber OS v5.1 • 9ahwa Khatra Interactive Station</div>
+      <button class="win-ctrl-btn close" style="width: auto; padding: 4px 12px; height: 26px;" onclick="location.reload()">Restart Login 🔄</button>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- 2. WINDOWS XP DESKTOP                                   -->
+  <!-- ======================================================== -->
+  <div id="desktop">
+    <!-- Bliss Wallpaper Background -->
+    <div class="bliss-wallpaper">
+      <div class="cloud cloud-1"></div>
+      <div class="cloud cloud-2"></div>
+      <div class="cloud cloud-3"></div>
+      <div class="bliss-hill-back"></div>
+      <div class="bliss-hill-front"></div>
+    </div>
+
+    <!-- Desktop Icons -->
+    <div class="desktop-icons-area">
+      <div class="desktop-icon" id="icon-ie" ondblclick="openInternetExplorer()" onclick="selectIcon(this)">
+        <div class="desktop-icon-img">🌐</div>
+        <div class="desktop-icon-label">Internet Explorer</div>
+      </div>
+
+      <div class="desktop-icon" id="icon-computer" onclick="selectIcon(this)">
+        <div class="desktop-icon-img">💻</div>
+        <div class="desktop-icon-label">My Computer</div>
+      </div>
+
+      <div class="desktop-icon" id="icon-docs" onclick="selectIcon(this)">
+        <div class="desktop-icon-img">📁</div>
+        <div class="desktop-icon-label">My Documents</div>
+      </div>
+
+      <div class="desktop-icon" id="icon-recycle" onclick="selectIcon(this)">
+        <div class="desktop-icon-img">🗑️</div>
+        <div class="desktop-icon-label">Recycle Bin</div>
+      </div>
+
+      <div class="desktop-icon" id="icon-cafe" onclick="selectIcon(this)">
+        <div class="desktop-icon-img">☕</div>
+        <div class="desktop-icon-label">Café Register</div>
+      </div>
+    </div>
+
+    <!-- ======================================================== -->
+    <!-- 3. INTERNET EXPLORER 6 WINDOW (DERB EXPRESS STORE)       -->
+    <!-- ======================================================== -->
+    <div class="xp-window" id="ie-window">
+      <!-- Title Bar -->
+      <div class="xp-title-bar">
+        <div class="xp-title-left">
+          <span>🌐</span>
+          <span>Derb Express - سوق التجهيزات بالدار البيضاء - Microsoft Internet Explorer</span>
+        </div>
+        <div class="xp-window-controls">
+          <div class="win-ctrl-btn" title="Minimize" onclick="minimizeIE()">_</div>
+          <div class="win-ctrl-btn" title="Maximize">□</div>
+          <div class="win-ctrl-btn close" title="Close" onclick="closeIE()">✕</div>
+        </div>
+      </div>
+
+      <!-- Menu Bar -->
+      <div class="ie-menu-bar">
+        <span>File</span>
+        <span>Edit</span>
+        <span>View</span>
+        <span>Favorites</span>
+        <span>Tools</span>
+        <span>Help</span>
+      </div>
+
+      <!-- Navigation Toolbar -->
+      <div class="ie-toolbar">
+        <div class="ie-nav-btn" onclick="playClickSound()">⬅ Back</div>
+        <div class="ie-nav-btn" onclick="playClickSound()">Forward ➡</div>
+        <div class="ie-nav-btn" onclick="playClickSound()">🛑 Stop</div>
+        <div class="ie-nav-btn" onclick="playClickSound()">🔄 Refresh</div>
+        <div class="ie-nav-btn" onclick="playClickSound()">🏠 Home</div>
+        <div class="ie-separator"></div>
+        <div class="ie-nav-btn">🔍 Search</div>
+        <div class="ie-nav-btn">⭐ Favorites</div>
+        <div class="ie-nav-btn">📜 History</div>
+      </div>
+
+      <!-- Address Bar -->
+      <div class="ie-address-bar">
+        <span class="ie-address-label">Address</span>
+        <div class="ie-address-input-wrapper">
+          <span style="font-size: 13px;">🌐</span>
+          <input type="text" class="ie-address-input" value="http://www.derb-express.ma/store/cafe_equipment" readonly>
+        </div>
+        <div class="ie-go-btn" onclick="playClickSound()">➡ Go</div>
+      </div>
+
+      <!-- ---------------------------------------------------- -->
+      <!-- PRO SHOP CONTENT VIEWPORT                            -->
+      <!-- ---------------------------------------------------- */ -->
+      <div class="shop-viewport">
+        <!-- Notice Banner -->
+        <div class="shop-notice-bar">
+          <span>🚚 التوصيل مجاني وفوري إلى باب الكراج بدرب السلطان، الدار البيضاء | دعم فني متواصل 24/7</span>
+        </div>
+
+        <!-- Shop Header -->
+        <div class="shop-header">
+          <div class="shop-brand">
+            <div class="shop-brand-icon">🛒</div>
+            <div>
+              <div class="shop-brand-name">DERB EXPRESS • درب إكسبريس</div>
+              <div class="shop-brand-tagline">سوق تجهيزات ومعدات المقاهي المهنية والتقليدية بالتقسيط والجملة</div>
+            </div>
+          </div>
+
+          <div class="shop-wallet-badge">
+            <span>💰 الرصيد المتوفر:</span>
+            <span id="wallet-balance">100 DH</span>
+          </div>
+        </div>
+
+        <!-- Category Tabs -->
+        <div class="shop-categories-nav">
+          <div class="cat-tab active" onclick="playClickSound()">🌟 جميع المعدات (All)</div>
+          <div class="cat-tab" onclick="playClickSound()">🧹 معدات النظافة (Cleaning)</div>
+          <div class="cat-tab" onclick="playClickSound()">☕ آلات القهوة (Espresso)</div>
+          <div class="cat-tab" onclick="playClickSound()">🍵 لوازم الشاي المغربي (Tea)</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="shop-main-content">
+          <!-- Day 1 Mission Card -->
+          <div class="day-mission-banner">
+            <div>
+              <div class="mission-text-title">
+                <span>📋 مهمة اليوم الأول: تجهيز وافتتاح مقهى درب السلطان</span>
+              </div>
+              <div class="mission-text-desc">
+                1. اشترِ سطل التنظيف والجفاف (30 DH) أولاً لمسح الغبار وتسييق أرضية الكراج بالكامل.<br>
+                2. بعد تنظيف الأرضية، اطلب آلة الإسبريسو الإيطالية (100 DH) لتوضع مباشرة على كونتوار المقهى!
+              </div>
+            </div>
+            <div style="font-size: 38px;">📦</div>
+          </div>
+
+          <!-- Product Catalog -->
+          <div class="products-grid">
+            
+            <!-- PRODUCT 1: MOP & BUCKET -->
+            <div class="product-card" id="card-mop">
+              <div class="product-img-header">
+                🪣
+                <div class="prod-badge badge-primary">Day 1 Essential</div>
+              </div>
+              <div class="product-info-body">
+                <div class="prod-title">سطل وعصارة + جفاف ميكروفايبر احترافي</div>
+                <div class="prod-subtitle">Kit Complet Seau Essoreur + Balai Microfibre Pro</div>
+                <ul class="prod-specs-list">
+                  <li>✅ سعة 15 لتر مع نظام عصر ميكانيكي قوي</li>
+                  <li>✅ رأس جفاف ميكروفايبر يدور 360° لامتصاص الأوساخ</li>
+                  <li>✅ مثالي لإزالة غبار الكراج وتلميع الأرضية بسرعة</li>
+                  <li>⚡ توصيل فوري لباب الكراج خلال ثوانٍ</li>
+                </ul>
+
+                <div class="product-footer-action">
+                  <div class="price-tag-wrap">
+                    <span class="price-main">30 DH</span>
+                    <span class="price-delivery">توصيل مجاني فوري 🚚</span>
+                  </div>
+                  <button id="btn-buy-mop" class="buy-btn buy-btn-active" onclick="buyMop()">
+                    🛒 طلب دابا (30 DH)
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PRODUCT 2: CLASSIC ESPRESSO MACHINE -->
+            <div class="product-card" id="card-espresso">
+              <div class="product-img-header">
+                ☕
+                <div class="prod-badge badge-success">Commercial Grade</div>
+              </div>
+              <div class="product-info-body">
+                <div class="prod-title">آلة تحضير الإسبريسو الإيطالية الكلاسيكية</div>
+                <div class="prod-subtitle">Machine Espresso Traditionnelle 15-Bar avec Buse Vapeur</div>
+                <ul class="prod-specs-list">
+                  <li>✅ مضخة ضغط 15 بار إيطالية لاستخلاص قهوة خاترة</li>
+                  <li>✅ عصا بخار قوية لتسخين وتبخير الحليب للقهوة بنص نص</li>
+                  <li>✅ هيكل ستانلس ستيل متين مخصص للاستعمال اليومي</li>
+                  <li>⚠️ <strong>شرط الطلب:</strong> تسييق وتنظيف أرضية الكراج أولاً</li>
+                </ul>
+
+                <div class="product-footer-action">
+                  <div class="price-tag-wrap">
+                    <span class="price-main">100 DH</span>
+                    <span class="price-delivery">توصيل فوري لباب الكراج 🚚</span>
+                  </div>
+                  <button id="btn-buy-espresso" class="buy-btn buy-btn-disabled" onclick="buyEspresso()">
+                    🔒 نظف الأرضية أولاً
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PRODUCT 3: COMMERCIAL GRINDER (TEASER) -->
+            <div class="product-card" style="opacity: 0.85;">
+              <div class="product-img-header">
+                ⚙️
+                <div class="prod-badge badge-locked">اليوم الثاني (Day 2)</div>
+              </div>
+              <div class="product-info-body">
+                <div class="prod-title">مطحنة بن كهربائية تجارية أوتوماتيكية</div>
+                <div class="prod-subtitle">Moulin à Café Professionnel avec Meules Coniques</div>
+                <ul class="prod-specs-list">
+                  <li>✅ درجات طحن دقيقة من الإسبريسو إلى القهوة التركية</li>
+                  <li>✅ وعاء حبوب سعة 1 كيلوغرام</li>
+                  <li>🔒 يتم فتح هذا المنتج في اليوم الثاني بعد الافتتاح</li>
+                </ul>
+
+                <div class="product-footer-action">
+                  <div class="price-tag-wrap">
+                    <span class="price-main" style="color: #64748b;">75 DH</span>
+                    <span class="price-delivery" style="color: #64748b;">قريباً في المتجر</span>
+                  </div>
+                  <button class="buy-btn buy-btn-disabled">
+                    🔒 مقفل حالياً
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- PRODUCT 4: MOROCCAN TEA SERVICE (TEASER) -->
+            <div class="product-card" style="opacity: 0.85;">
+              <div class="product-img-header">
+                🍵
+                <div class="prod-badge badge-locked">اليوم الثاني (Day 2)</div>
+              </div>
+              <div class="product-info-body">
+                <div class="prod-title">طقم أتاي مغربي أصيل (براد فاسي + صينية نحاس)</div>
+                <div class="prod-subtitle">Service à Thé Marocain Traditionnel Fassi</div>
+                <ul class="prod-specs-list">
+                  <li>✅ براد ستانلس أصيل منقوش بنقش مغربي تقليدي</li>
+                  <li>✅ صينية نحاسية دائرية مع 6 كؤوس زجاجية حياتي</li>
+                  <li>🔒 يتم فتح هذا المنتج في اليوم الثاني</li>
+                </ul>
+
+                <div class="product-footer-action">
+                  <div class="price-tag-wrap">
+                    <span class="price-main" style="color: #64748b;">50 DH</span>
+                    <span class="price-delivery" style="color: #64748b;">قريباً في المتجر</span>
+                  </div>
+                  <button class="buy-btn buy-btn-disabled">
+                    🔒 مقفل حالياً
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Start Menu Popup -->
+    <div id="xp-start-menu">
+      <div class="start-menu-header">
+        <div class="start-menu-avatar">☕</div>
+        <div>Derb Sultan Barista</div>
+      </div>
+      <div class="start-menu-columns">
+        <div class="start-col-left">
+          <div class="start-item" onclick="openInternetExplorer(); toggleStartMenu();">
+            <span style="font-size: 18px;">🌐</span>
+            <strong>Internet Explorer</strong>
+          </div>
+          <div class="start-item" onclick="toggleStartMenu();">
+            <span style="font-size: 18px;">✉️</span>
+            <span>Outlook Express</span>
+          </div>
+          <div class="start-item" onclick="toggleStartMenu();">
+            <span style="font-size: 18px;">🎵</span>
+            <span>Windows Media Player</span>
+          </div>
+          <div class="start-item" onclick="toggleStartMenu();">
+            <span style="font-size: 18px;">📝</span>
+            <span>Notepad</span>
+          </div>
+        </div>
+        <div class="start-col-right">
+          <div class="start-item"><strong>My Documents</strong></div>
+          <div class="start-item"><strong>My Pictures</strong></div>
+          <div class="start-item"><strong>Control Panel</strong></div>
+          <div class="start-item"><strong>Help and Support</strong></div>
+          <div class="start-item"><strong>Search</strong></div>
+          <div class="start-item"><strong>Run...</strong></div>
+        </div>
+      </div>
+      <div class="start-menu-footer">
+        <div class="start-footer-btn" onclick="logOff()">
+          <span>🔑</span> Log Off
+        </div>
+        <div class="start-footer-btn" onclick="turnOff()">
+          <span>🔴</span> Turn Off Computer
+        </div>
+      </div>
+    </div>
+
+    <!-- Taskbar -->
+    <div class="xp-taskbar">
+      <div class="xp-start-btn" onclick="toggleStartMenu()">
+        <div class="start-logo">
+          <span class="f-red"></span>
+          <span class="f-green"></span>
+          <span class="f-blue"></span>
+          <span class="f-yellow"></span>
+        </div>
+        <span class="start-text">start</span>
+      </div>
+
+      <div class="taskbar-tasks-row">
+        <div class="taskbar-tab active" id="taskbar-ie-tab" onclick="toggleIE()">
+          <span>🌐</span>
+          <span>Derb Express - سوق...</span>
+        </div>
+      </div>
+
+      <div class="xp-system-tray">
+        <span>🇲🇦</span>
+        <span>🔊</span>
+        <span>💻</span>
+        <span id="system-clock">04:20 PM</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delivery Toast -->
+  <div id="delivery-toast">
+    <div class="toast-icon">📦</div>
+    <div>
+      <div class="toast-title" id="toast-title">تم استلام طلبك بنجاح!</div>
+      <div class="toast-desc" id="toast-desc">الصندوق الكرتوني وصل الآن إلى باب الكراج بدرب السلطان.</div>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- JAVASCRIPT: AUDIO SYNTH, AUTO-LOGIN, AND SHOP LOGIC      -->
+  <!-- ======================================================== -->
+  <script>
+    // ----------------------------------------------------
+    // 1. WEB AUDIO SYNTHESIZER (No external audio files needed)
+    // ----------------------------------------------------
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    // Windows XP Startup Sound (Iconic 5-note harmonic chord)
+    function playXpStartupSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const notes = [
+          { f: 277.18, t: 0.00, d: 2.5 }, // Db4
+          { f: 415.30, t: 0.15, d: 2.5 }, // Ab4
+          { f: 622.25, t: 0.35, d: 2.8 }, // Eb5
+          { f: 830.61, t: 0.55, d: 3.0 }, // Ab5
+          { f: 932.33, t: 0.75, d: 3.2 }, // Bb5
+          { f: 1396.91, t: 0.95, d: 3.5 } // F6
+        ];
+
+        notes.forEach(n => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(n.f, now + n.t);
+
+          gain.gain.setValueAtTime(0, now + n.t);
+          gain.gain.linearRampToValueAtTime(0.12, now + n.t + 0.1);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + n.t + n.d);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(now + n.t);
+          osc.stop(now + n.t + n.d);
+        });
+      } catch (e) {
+        console.log("Audio not allowed yet", e);
+      }
+    }
+
+    // Classic Windows XP Click Sound
+    function playClickSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
+
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.04);
+      } catch (e) {}
+    }
+
+    // Cash Register "Cha-Ching" Purchase Sound
+    function playCashSound() {
+      try {
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        
+        // Bell ding 1
+        const osc1 = ctx.createOscillator();
+        const gain1 = ctx.createGain();
+        osc1.frequency.setValueAtTime(1800, now);
+        gain1.gain.setValueAtTime(0.2, now);
+        gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.6);
+        osc1.connect(gain1);
+        gain1.connect(ctx.destination);
+        osc1.start(now);
+        osc1.stop(now + 0.6);
+
+        // Bell ding 2 (higher)
+        const osc2 = ctx.createOscillator();
+        const gain2 = ctx.createGain();
+        osc2.frequency.setValueAtTime(2400, now + 0.12);
+        gain2.gain.setValueAtTime(0.25, now + 0.12);
+        gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+        osc2.connect(gain2);
+        gain2.connect(ctx.destination);
+        osc2.start(now + 0.12);
+        osc2.stop(now + 0.8);
+      } catch (e) {}
+    }
+
+    // ----------------------------------------------------
+    // 2. AUTO-TYPING LOGIN SYSTEM
+    // ----------------------------------------------------
+    const passwordInput = document.getElementById('xp-password-field');
+    const loginStatus = document.getElementById('login-status');
+    const loginGoBtn = document.getElementById('xp-login-go');
+    const loginScreen = document.getElementById('login-screen');
+
+    const samplePassword = "••••••••";
+    let typeIndex = 0;
+
+    function runAutoLogin() {
+      typeIndex = 0;
+      passwordInput.value = "";
+      loginStatus.textContent = "Entering password...";
+
+      const typeInterval = setInterval(() => {
+        if (typeIndex < samplePassword.length) {
+          passwordInput.value += "•";
+          playClickSound();
+          typeIndex++;
+        } else {
+          clearInterval(typeInterval);
+          setTimeout(() => {
+            // Trigger Submit Click
+            loginGoBtn.style.transform = "scale(0.92)";
+            playClickSound();
+            setTimeout(() => {
+              loginGoBtn.style.transform = "scale(1)";
+              loginStatus.textContent = "Loading your personal settings (جاري تحميل الإعدادات)...";
+              playXpStartupSound();
+
+              // Fade out login screen and reveal desktop
+              setTimeout(() => {
+                loginScreen.style.opacity = '0';
+                setTimeout(() => {
+                  loginScreen.style.display = 'none';
+                }, 600);
+              }, 1200);
+            }, 250);
+          }, 400);
+        }
+      }, 140);
+    }
+
+    // Start auto login after 600ms on load
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(runAutoLogin, 600);
+    });
+
+    // ----------------------------------------------------
+    // 3. DESKTOP & TASKBAR INTERACTION
+    // ----------------------------------------------------
+    function updateClock() {
+      const now = new Date();
+      let hours = now.getHours();
+      const minutes = String(now.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      const str = `${String(hours).padStart(2, '0')}:${minutes} ${ampm}`;
+      document.getElementById('system-clock').textContent = str;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    function selectIcon(el) {
+      document.querySelectorAll('.desktop-icon').forEach(i => i.classList.remove('selected'));
+      el.classList.add('selected');
+      playClickSound();
+    }
+
+    const startMenu = document.getElementById('xp-start-menu');
+    function toggleStartMenu() {
+      playClickSound();
+      if (startMenu.style.display === 'flex') {
+        startMenu.style.display = 'none';
+      } else {
+        startMenu.style.display = 'flex';
+      }
+    }
+
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('#xp-start-menu') && !e.target.closest('.xp-start-btn')) {
+        startMenu.style.display = 'none';
+      }
+    });
+
+    const ieWindow = document.getElementById('ie-window');
+    const taskbarTab = document.getElementById('taskbar-ie-tab');
+
+    function openInternetExplorer() {
+      playClickSound();
+      ieWindow.style.display = 'flex';
+      taskbarTab.style.display = 'flex';
+      taskbarTab.classList.add('active');
+    }
+
+    function closeIE() {
+      playClickSound();
+      ieWindow.style.display = 'none';
+      taskbarTab.classList.remove('active');
+    }
+
+    function minimizeIE() {
+      playClickSound();
+      ieWindow.style.display = 'none';
+      taskbarTab.classList.remove('active');
+    }
+
+    function toggleIE() {
+      playClickSound();
+      if (ieWindow.style.display === 'none') {
+        ieWindow.style.display = 'flex';
+        taskbarTab.classList.add('active');
+      } else {
+        ieWindow.style.display = 'none';
+        taskbarTab.classList.remove('active');
+      }
+    }
+
+    function logOff() {
+      playClickSound();
+      startMenu.style.display = 'none';
+      loginScreen.style.display = 'flex';
+      loginScreen.style.opacity = '1';
+      setTimeout(runAutoLogin, 600);
+    }
+
+    function turnOff() {
+      playClickSound();
+      alert("Windows is shutting down... / تم إغلاق الحاسوب بنجاح.");
+      location.reload();
+    }
+
+    // ----------------------------------------------------
+    // 4. DERB EXPRESS SHOPPING & PROGRESSION SYSTEM
+    // ----------------------------------------------------
+    let userWallet = 100;
+    let boughtMop = false;
+    let floorCleaned = false; // toggled after mop purchase
+    let boughtEspresso = false;
+
+    const walletDisplay = document.getElementById('wallet-balance');
+    const btnBuyMop = document.getElementById('btn-buy-mop');
+    const btnBuyEspresso = document.getElementById('btn-buy-espresso');
+    const toast = document.getElementById('delivery-toast');
+    const toastTitle = document.getElementById('toast-title');
+    const toastDesc = document.getElementById('toast-desc');
+
+    function showToast(title, desc) {
+      toastTitle.textContent = title;
+      toastDesc.textContent = desc;
+      toast.classList.add('show');
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 5000);
+    }
+
+    function buyMop() {
+      if (boughtMop) return;
+      if (userWallet < 30) {
+        alert("الرصيد غير كافٍ! (Insufficient balance)");
+        return;
+      }
+
+      playCashSound();
+      userWallet -= 30;
+      walletDisplay.textContent = `${userWallet} DH`;
+      boughtMop = true;
+
+      btnBuyMop.className = "buy-btn buy-btn-bought";
+      btnBuyMop.innerHTML = "✅ تم الطلب - وصل إلى باب الكراج 📦";
+
+      showToast(
+        "تم طلب السطل والجفاف (30 DH)!",
+        "خرج الصندوق الآن ووصل خارج باب الكراج! اخرج لفتحه وبدء تسييق الأرضية."
+      );
+
+      // Simulate floor cleaning ready after acquiring mop
+      setTimeout(() => {
+        floorCleaned = true;
+        btnBuyEspresso.className = "buy-btn buy-btn-active";
+        btnBuyEspresso.innerHTML = "🛒 طلب دابا (100 DH)";
+        showToast(
+          "الأرضية أصبحت جاهزة! ✨",
+          "تم تسييق الكراج بالكامل. يمكنك الآن شراء آلة الإسبريسو الكلاسيكية!"
+        );
+      }, 3500);
+    }
+
+    function buyEspresso() {
+      if (boughtEspresso) return;
+      if (!floorCleaned) {
+        alert("خاصك تسيق الغبرة كاملة وتمسح الأرضية عاد تقدر تشري ماكينة القهوة!");
+        return;
+      }
+      if (userWallet < 100) {
+        // Barista discount if needed or allow purchase
+        userWallet = 100;
+      }
+
+      playCashSound();
+      userWallet -= 100;
+      walletDisplay.textContent = `${userWallet} DH`;
+      boughtEspresso = true;
+
+      btnBuyEspresso.className = "buy-btn buy-btn-bought";
+      btnBuyEspresso.innerHTML = "✅ تم الطلب - الماكينة فوق الكونتوار ☕";
+
+      showToast(
+        "🎉 مبروك! تم شراء آلة الإسبريسو!",
+        "تم إرسال الصندوق الضخم إلى باب الكراج! افتحه لتثبيت الماكينة فوق الكونتوار."
+      );
+    }
+  </script>
+</body>
+</html>
