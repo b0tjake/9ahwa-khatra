@@ -60,15 +60,30 @@ namespace QahwaKhatra.Cafe
             }
             else if (_itemType == DeliveryItemType.EspressoMachine)
             {
-                // Spawn Espresso Machine on the counter
-                var machine = GameObject.CreatePrimitive(PrimitiveType.Cube);
-                machine.name = "Espresso_Machine";
-                machine.transform.position = new Vector3(-2f, 1.4f, 4f);
-                machine.transform.localScale = new Vector3(0.9f, 0.8f, 0.7f);
+                var machinePrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/models/coffee machine.fbx");
+                GameObject machine;
+                if (machinePrefab != null)
+                {
+                    machine = Instantiate(machinePrefab);
+                    machine.transform.localScale = Vector3.one * 1.6f;
+                    machine.transform.rotation = Quaternion.Euler(0f, 180f, 0f);
+                }
+                else
+                {
+                    machine = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                    machine.transform.localScale = new Vector3(0.9f, 0.8f, 0.7f);
+                }
 
-                var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-                mat.color = new Color(0.75f, 0.15f, 0.15f);
-                machine.GetComponent<Renderer>().material = mat;
+                machine.name = "Espresso_Machine";
+                machine.transform.position = new Vector3(-2f, 1.25f, 4f);
+
+                var col = machine.GetComponent<Collider>();
+                if (col == null)
+                {
+                    var bCol = machine.AddComponent<BoxCollider>();
+                    bCol.size = Vector3.one * 0.6f;
+                    bCol.center = new Vector3(0f, 0.25f, 0f);
+                }
 
                 machine.AddComponent<EspressoStation>();
 

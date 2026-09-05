@@ -116,14 +116,29 @@ namespace QahwaKhatra.Cafe
 
         private void SpawnDeliveryBox(DeliveryItemType itemType, string itemName, Vector3 streetPos)
         {
-            var box = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            var boxPrefab = UnityEditor.AssetDatabase.LoadAssetAtPath<GameObject>("Assets/models/box.fbx");
+            GameObject box;
+            if (boxPrefab != null)
+            {
+                box = Instantiate(boxPrefab);
+                box.transform.localScale = Vector3.one * 1.5f;
+            }
+            else
+            {
+                box = GameObject.CreatePrimitive(PrimitiveType.Cube);
+                box.transform.localScale = new Vector3(0.85f, 0.75f, 0.85f);
+            }
+
             box.name = $"DeliveryBox_{itemType}";
             box.transform.position = streetPos;
-            box.transform.localScale = new Vector3(0.85f, 0.75f, 0.85f);
 
-            var mat = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-            mat.color = new Color(0.72f, 0.53f, 0.35f); // Realistic cardboard brown
-            box.GetComponent<Renderer>().material = mat;
+            var col = box.GetComponent<Collider>();
+            if (col == null)
+            {
+                var bCol = box.AddComponent<BoxCollider>();
+                bCol.size = Vector3.one * 0.7f;
+                bCol.center = new Vector3(0f, 0.35f, 0f);
+            }
 
             var delivery = box.AddComponent<DeliveryBox>();
             delivery.Initialize(itemType, itemName);
